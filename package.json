@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "CLI that generates React propType definitions from a swagger endpoint",
   "main": "bin/index.js",
+  "bin": "bin/index.js",
   "scripts": {
     "test": "./bin/index.js http://petstore.swagger.io/v2/swagger.json"
   },
