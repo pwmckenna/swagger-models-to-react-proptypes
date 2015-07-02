@@ -1,6 +1,6 @@
 {
   "name": "swagger-models-to-react-proptypes",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "CLI that generates React propType definitions from a swagger endpoint",
   "main": "bin/index.js",
   "bin": "bin/index.js",
