@@ -50,7 +50,8 @@ var url = process.argv[2];
 var swagger = new client({
     url: url,
     success: function() {
-        console.log('\n' + url + '\n\n' + new Array(url.length + 1).join('-') + '\n\n');
+        var header = 'Generated PropTypes for ' + url;
+        console.log('\n/**\n\n' + header + '\n' + new Array(header.length + 1).join('-') + '\n\n**/\n\n');
 
         console.log('var PropTypes = {\n');
 
