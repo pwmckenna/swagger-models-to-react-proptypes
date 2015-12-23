@@ -41,7 +41,6 @@ var getPropType = function (definition) {
     case 'string':
         return 'React.PropTypes.string';
     case 'integer':
-        return 'React.PropTypes.number';
     case 'number':
         return 'React.PropTypes.number';
     case 'boolean':
