@@ -4,7 +4,7 @@ var indent = function (str) {
     return _.map(str.split('\n'), function (line) {
         return '    ' + line;
     }).join('\n');
-}
+};
 
 var missingRefPropType = function(props, propName, componentName) {
     return new Error('PropType could not be determined due to a missing Swagger model definition reference');
@@ -20,10 +20,13 @@ var getPropType = function (definition) {
     }
     if (definition.$ref) {
         var name = definition.$ref.match('#/definitions/(.*)')[1];
-        return name === 'undefined' ? missingRefPropType.toString() : 'PropTypes.name';
+        return name === 'undefined' ? missingRefPropType.toString() : 'PropTypes.' + name;
     }
     switch (definition.type) {
     case 'object':
+        if(_.isEmpty(definition.properties)) {
+            return 'React.PropTypes.object';
+        }
         return 'React.PropTypes.shape({\n'
             + indent(_.map(definition.properties, function (property, name) {
                 var keyPropType = convertDefinitionObjectToPropTypes(property, name);
@@ -32,12 +35,13 @@ var getPropType = function (definition) {
                 }
                 return keyPropType;
             }).join(',\n')) +
-        '\n})'
+        '\n})';
     case 'array':
         return 'React.PropTypes.arrayOf(' + getPropType(definition.items) + ')';
     case 'string':
         return 'React.PropTypes.string';
     case 'integer':
+    case 'number':
         return 'React.PropTypes.number';
     case 'boolean':
         return 'React.PropTypes.bool';
