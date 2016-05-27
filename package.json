@@ -14,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^3.10.0",
-    "swagger-client": "^2.1.1"
+    "swagger-client": "^2.1.1",
+    "topsort": "0.0.2"
   },
   "devDependencies": {
     "node-static": "^0.7.7"
