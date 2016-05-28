@@ -78,7 +78,7 @@ var formatPropType = function (name, definition) {
 
 module.exports = function (swagger) {
     var header = "import React from 'react'\n";
-    console.log('\n// generated from ' + swagger.url + '\n')
+    console.log(header + '\n// generated from ' + swagger.url + '\n')
     var edges = _.map(swagger.models, function (model, name) {
         return modelReferences(model.definition).map(function(m) { return [m, name] });
     });
