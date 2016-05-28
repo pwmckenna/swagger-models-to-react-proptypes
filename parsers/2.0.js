@@ -1,8 +1,9 @@
 var _ = require('lodash');
+var topsort = require('topsort');
 
 var indent = function (str) {
     return _.map(str.split('\n'), function (line) {
-        return '    ' + line;
+        return '  ' + line;
     }).join('\n');
 };
 
@@ -16,11 +17,11 @@ var unknownPropType = function(props, propName, componentName) {
 
 var getPropType = function (definition) {
     if (definition.enum) {
-        return 'React.PropTypes.oneOf(' + JSON.stringify(definition.enum, null, 4) + ')';
+        return 'React.PropTypes.oneOf(' + JSON.stringify(definition.enum, null, 2) + ')';
     }
     if (definition.$ref) {
         var name = definition.$ref.match('#/definitions/(.*)')[1];
-        return name === 'undefined' ? missingRefPropType.toString() : 'PropTypes.' + name;
+        return name === 'undefined' ? missingRefPropType.toString() : name;
     }
     switch (definition.type) {
     case 'object':
@@ -54,16 +55,39 @@ var convertDefinitionObjectToPropTypes = function (definition, name) {
     return name + ': ' + getPropType(definition);
 };
 
+var modelReferences = function (definition) {
+    if (definition.$ref) {
+        var name = definition.$ref.match('#/definitions/(.*)')[1];
+        return [name];
+    }
+    var deps = [];
+    if (definition.type === 'object') {
+        _.map(definition.properties, function (property, name) {
+            deps = deps.concat(modelReferences(property));
+        });
+    }
+    if (definition.type === 'array') {
+        return modelReferences(definition.items);
+    }
+    return deps;
+};
+
+var formatPropType = function (name, definition) {
+    return 'export const ' + name + ' = ' + definition + '\n';
+};
+
 module.exports = function (swagger) {
-    var header = 'Generated PropTypes for ' + swagger.url;
-    console.log('\n/**\n\n' + header + '\n' + new Array(header.length + 1).join('-') + '\n\n**/\n\n');
-
-    console.log('var PropTypes = {\n');
-
-    var propTypes = _.map(swagger.models, function (model, name) {
-        return convertDefinitionObjectToPropTypes(model.definition, name);
+    var header = "import React from 'react'\n";
+    console.log(header + '\n// generated from ' + swagger.url + '\n')
+    var edges = _.map(swagger.models, function (model, name) {
+        var e = modelReferences(model.definition).map(function(m) { return [m, name] });
+        return e.concat([[name, name]]);
     });
-
-    console.log(indent(propTypes.join(',\n\n')));
-    console.log('\n};\n\n');
+    var names = topsort(edges.reduce(function (prev, cur) { return prev.concat(cur) },[]));
+    var propTypes = _.map(names, function (name) {
+        return formatPropType(name, getPropType(swagger.models[name].definition));
+    });
+    _.each(propTypes, function (pt) {
+        console.log(pt);
+    });
 };
