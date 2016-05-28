@@ -80,7 +80,8 @@ module.exports = function (swagger) {
     var header = "import React from 'react'\n";
     console.log(header + '\n// generated from ' + swagger.url + '\n')
     var edges = _.map(swagger.models, function (model, name) {
-        return modelReferences(model.definition).map(function(m) { return [m, name] });
+        var e = modelReferences(model.definition).map(function(m) { return [m, name] });
+        return e.concat([[name, name]]);
     });
     var names = topsort(edges.reduce(function (prev, cur) { return prev.concat(cur) },[]));
     var propTypes = _.map(names, function (name) {
