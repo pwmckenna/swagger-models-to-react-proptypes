@@ -10,67 +10,69 @@ __`swagger-models-to-react-proptypes http://petstore.swagger.io/v2/swagger.json`
 
 ```js
 /**
-
-Generated PropTypes for http://petstore.swagger.io/v2/swagger.json
-------------------------------------------------------------------
-
+Generated PropTypes for http://127.0.0.1:1337/petstore-v2.0.json----------------------------------------------------------------
 **/
 
+import PropTypes from "prop-types";
 
-var PropTypes = {
 
-    Order: React.PropTypes.shape({
-        id: React.PropTypes.number,
-        petId: React.PropTypes.number,
-        quantity: React.PropTypes.number,
-        shipDate: React.PropTypes.string,
-        status: React.PropTypes.oneOf([
-            "placed",
-            "approved",
-            "delivered"
-        ]),
-        complete: React.PropTypes.bool
-    }),
-    
-    Category: React.PropTypes.shape({
-        id: React.PropTypes.number,
-        name: React.PropTypes.string
-    }),
-    
-    User: React.PropTypes.shape({
-        id: React.PropTypes.number,
-        username: React.PropTypes.string,
-        firstName: React.PropTypes.string,
-        lastName: React.PropTypes.string,
-        email: React.PropTypes.string,
-        password: React.PropTypes.string,
-        phone: React.PropTypes.string,
-        userStatus: React.PropTypes.number
-    }),
-    
-    Tag: React.PropTypes.shape({
-        id: React.PropTypes.number,
-        name: React.PropTypes.string
-    }),
-    
-    Pet: React.PropTypes.shape({
-        id: React.PropTypes.number,
-        category: PropTypes.Category,
-        name: React.PropTypes.string.isRequired,
-        photoUrls: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-        tags: React.PropTypes.arrayOf(PropTypes.Tag),
-        status: React.PropTypes.oneOf([
-            "available",
-            "pending",
-            "sold"
-        ])
-    }),
-    
-    ApiResponse: React.PropTypes.shape({
-        code: React.PropTypes.number,
-        type: React.PropTypes.string,
-        message: React.PropTypes.string
-    })
+export const Order = PropTypes.shape({
+    id: PropTypes.number,
+    petId: PropTypes.number,
+    quantity: PropTypes.number,
+    shipDate: PropTypes.date,
+    status: PropTypes.oneOf([
+        "placed",
+        "approved",
+        "delivered"
+    ]),
+    complete: PropTypes.bool
+});
 
-};
+export const Category = PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string
+});
+
+export const User = PropTypes.shape({
+    id: PropTypes.number,
+    username: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    password: PropTypes.string,
+    phone: PropTypes.string,
+    userStatus: PropTypes.number
+});
+
+export const Tag = PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string
+});
+
+export const ApiResponse = PropTypes.shape({
+    code: PropTypes.number,
+    type: PropTypes.string,
+    message: PropTypes.string
+});
+
+export const Pet = PropTypes.shape({
+    id: PropTypes.number,
+    category: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string
+    }),
+    name: PropTypes.string.isRequired,
+    photoUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string
+    })),
+    status: PropTypes.oneOf([
+        "available",
+        "pending",
+        "sold"
+    ]),
+    createdAt: PropTypes.date
+});
 ```
