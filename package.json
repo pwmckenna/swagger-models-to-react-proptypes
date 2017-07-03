@@ -8,13 +8,14 @@
     "fixtures": "./node_modules/node-static/bin/cli.js fixtures -p 1337 &",
     "test": "npm run fixtures && npm run test-1.2 && npm run test-2.0",
     "test-1.2": "./bin/index.js http://127.0.0.1:1337/fixture-v1.2.json",
-    "test-2.0": "./bin/index.js http://127.0.0.1:1337/petstore-v2.0.json"
+    "test-2.0": "./bin/index.js http://127.0.0.1:1337/petstore-v2.0.json",
+    "2.0": "(npm run fixtures) && (./bin/index.js http://127.0.0.1:1337/petstore-v2.0.json > 2.0.js)"
   },
   "author": "Patrick Williams <pwmckenna@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "lodash": "^3.10.0",
-    "swagger-client": "^2.1.1"
+    "swagger-client": "^3.0.0"
   },
   "devDependencies": {
     "node-static": "^0.7.7"

@@ -10,12 +10,12 @@ var swaggerParsers = {
 
 var url = process.argv[2];
 
-var client = new SwaggerClient({
-    url: url,
-    success: function() {
-        if (!_.has(swaggerParsers, client.swaggerVersion)) {
-            throw new Error('Unsupported swagger version - ' + client.swaggerVersion);
-        }
-        swaggerParsers[client.swaggerVersion](client);
+var client = SwaggerClient(url)
+  .then(client => {
+    const version = client.spec.swagger;
+    if (!_.has(swaggerParsers, version)) {
+        throw new Error('Unsupported swagger version - ' + version);
     }
-});
+    swaggerParsers[version](client);
+  })
+  .catch((e) => console.log(`ERROR: ${e.message}`));
